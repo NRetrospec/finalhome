@@ -1,0 +1,208 @@
+/* Cyber Grid Background */
+.cyber-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-move 20s linear infinite;
+  z-index: 0;
+}
+
+@keyframes grid-move {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+/* Glow Animation */
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
+  50% { text-shadow: 0 0 30px rgba(6, 182, 212, 0.8), 0 0 40px rgba(168, 85, 247, 0.4); }
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* Neon Buttons */
+.neon-button {
+  position: relative;
+  padding: 12px 32px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 2px solid;
+  background: transparent;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.neon-button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.neon-button:hover:before {
+  left: 100%;
+}
+
+.neon-button-cyan {
+  color: #06b6d4;
+  border-color: #06b6d4;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+.neon-button-cyan:hover {
+  background: rgba(6, 182, 212, 0.1);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
+  transform: translateY(-2px);
+}
+
+.neon-button-purple {
+  color: #a855f7;
+  border-color: #a855f7;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+.neon-button-purple:hover {
+  background: rgba(168, 85, 247, 0.1);
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+  transform: translateY(-2px);
+}
+
+.neon-button-pink {
+  color: #ec4899;
+  border-color: #ec4899;
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+}
+
+.neon-button-pink:hover {
+  background: rgba(236, 72, 153, 0.1);
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.6);
+  transform: translateY(-2px);
+}
+
+.neon-button-green {
+  color: #10b981;
+  border-color: #10b981;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.neon-button-green:hover {
+  background: rgba(16, 185, 129, 0.1);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+  transform: translateY(-2px);
+}
+
+.neon-button-blue {
+  color: #3b82f6;
+  border-color: #3b82f6;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.neon-button-blue:hover {
+  background: rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Cyber Cards */
+.cyber-card {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-card:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.6), transparent);
+  animation: scan 3s linear infinite;
+}
+
+.cyber-card:hover {
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 8px 32px rgba(6, 182, 212, 0.1);
+  transform: translateY(-4px);
+}
+
+@keyframes scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #06b6d4;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0891b2;
+}
+
+/* Loading Animation */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Responsive Design Helpers */
+@media (max-width: 768px) {
+  .cyber-card {
+    padding: 16px;
+  }
+  
+  .neon-button {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+}
