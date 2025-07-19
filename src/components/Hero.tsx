@@ -22,7 +22,10 @@ export function Hero({ setActiveTab }: HeroProps) {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <button className="neon-button neon-button-cyan group">
+          <button
+            className="neon-button neon-button-cyan group"
+            onClick={() => setActiveTab('services')}
+          >
             <span className="relative z-10">Start Your Project</span>
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-cyan-600/20 rounded-lg blur-xl group-hover:blur-2xl transition-all duration-300"></div>
           </button>
