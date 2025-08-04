@@ -56,11 +56,16 @@ export default function App() {
       <Toaster theme="dark" />
       
       {showPaymentSuccess && sessionId && (
-        <PaymentSuccess
-          sessionId={sessionId}
-          onClose={() => setShowPaymentSuccess(false)}
-        />
-      )}
+  <PaymentSuccess
+    sessionId={sessionId}
+    onClose={() => setShowPaymentSuccess(false)}
+    redirectHome={() => {
+      setShowPaymentSuccess(false);
+      setActiveTab("home");
+    }}
+  />
+)}
+
     </div>
   );
 }

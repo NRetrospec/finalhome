@@ -24,7 +24,10 @@ export const createCheckoutSession = action({
     }
     
     try {
-      const baseUrl = process.env.CONVEX_SITE_URL || "http://localhost:5173";
+      if (!process.env.CONVEX_SITE_URL) {
+        throw new Error("CONVEX_SITE_URL environment variable not configured");
+      }
+      const baseUrl = process.env.CONVEX_SITE_URL;
       
       // Create line item based on service type
       const lineItem: Stripe.Checkout.SessionCreateParams.LineItem = {
