@@ -77,6 +77,106 @@ export const createCheckoutSession = action({
   },
 });
 
+// Helper function to apply promo codes
+function applyPromoCode(promoCode: string, price: number) {
+  const normalizedCode = promoCode.trim().toUpperCase();
+  let discount = 0;
+  let discountMessage = "";
+
+  switch (normalizedCode) {
+    case "HALFPRICE":
+      discount = price * 0.5;
+      discountMessage = "50% discount applied";
+      break;
+    case "QUARTEROFF":
+      discount = price * 0.25;
+      discountMessage = "25% discount applied";
+      break;
+    case "FIFTYCENTS":
+      discount = price - 0.5;
+      discountMessage = "Price reduced to $0.50";
+      break;
+    default:
+      throw new Error("Invalid promo code");
+  }
+
+  const discountedPrice = Math.max(0.5, price - discount);
+  
+  return {
+    discountedPrice,
+    discountAmount: discount,
+    discountMessage
+  };
+}
+
+export const createPaymentIntent = action({
+  args: {
+    serviceId: v.string(),
+    serviceName: v.string(),
+    price: v.number(),
+    customerEmail: v.optional(v.string()),
+    customerName: v.optional(v.string()),
+    promoCode: v.optional(v.string()),
+  },
+ handler: async (ctx, args) => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error("Stripe secret key not configured");
+  }
+
+  try {
+    let finalAmount = args.price;
+    let discountMessage = "";
+    let discountApplied = false;
+
+    if (typeof args.price !== "number" || isNaN(args.price)) {
+      throw new Error("Invalid price value");
+    }
+
+    if (args.promoCode) {
+      try {
+        const promoResult = applyPromoCode(args.promoCode, args.price);
+        finalAmount = promoResult.discountedPrice;
+        discountMessage = promoResult.discountMessage;
+        discountApplied = true;
+      } catch (error) {
+        console.warn("Invalid promo code:", args.promoCode);
+      }
+    }
+
+    const amountInCents = Math.round(finalAmount * 100);
+    console.log("Creating PaymentIntent with amount (cents):", amountInCents);
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amountInCents,
+      currency: "usd",
+      payment_method_types: ["card"],
+      metadata: {
+        serviceId: args.serviceId,
+        serviceName: args.serviceName,
+        customerEmail: args.customerEmail || "",
+        customerName: args.customerName || "",
+        promoCode: args.promoCode || "",
+        originalPrice: args.price.toString(),
+        discountedPrice: finalAmount.toString(),
+        discountApplied: discountApplied.toString(),
+      },
+    });
+
+    return {
+      clientSecret: paymentIntent.client_secret,
+      discountedPrice: finalAmount,
+      discountMessage,
+      discountApplied
+    };
+  } catch (error) {
+    console.error("Error creating PaymentIntent:", error);
+    const message = error instanceof Error ? error.message : JSON.stringify(error);
+    throw new Error(`Failed to create PaymentIntent: ${message}`);
+  }
+}
+
+});
+
 export const verifyPayment = action({
   args: {
     sessionId: v.string(),

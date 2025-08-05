@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
+import { StripeCheckoutForm } from "./StripeCheckoutForm";
 
 export function Services() {
   const [selectedService, setSelectedService] = useState<string | null>(null);
@@ -143,27 +144,20 @@ export function Services() {
     }
   };
 
-  const handlePurchaseNow = async (serviceData: any) => {
-    try {
-      const result = await createCheckoutSession({
-        serviceId: serviceData.tier ? 
-          `${serviceData.id}-${serviceData.tier.id}` : 
-          serviceData.id,
-        serviceName: serviceData.tier ? 
-          `${serviceData.title} + ${serviceData.tier.title}` : 
-          serviceData.title,
-        price: serviceData.combinedPrice || serviceData.price,
-        isRecurring: serviceData.tier?.isRecurring || false,
-        customerEmail: customerInfo.email,
-        customerName: customerInfo.name,
-      });
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
 
-      if (result.url) {
-        window.location.href = result.url;
-      }
-    } catch (error) {
-      toast.error("Failed to create checkout session. Please try again.");
-    }
+  const handlePurchaseNow = (serviceData: any) => {
+    setShowCheckoutForm(true);
+  };
+
+  const handlePaymentSuccess = () => {
+    setShowCheckoutForm(false);
+    setShowConsultationForm(false);
+    toast.success("Payment successful! Your service is now active.");
+  };
+
+  const handlePaymentCancel = () => {
+    setShowCheckoutForm(false);
   };
 
   if (showConsultationForm) {
@@ -228,6 +222,13 @@ export function Services() {
                 </div>
               </form>
             </div>
+          ) : showCheckoutForm ? (
+            <StripeCheckoutForm
+              serviceData={submittedServiceData}
+              customerInfo={customerInfo}
+              onSuccess={handlePaymentSuccess}
+              onCancel={handlePaymentCancel}
+            />
           ) : (
             <div className="space-y-6">
               <div className="cyber-card text-center">
