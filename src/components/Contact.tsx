@@ -16,10 +16,8 @@ export function Contact() {
 
   const services = [
     "Website Development ($1000)",
-    "Website + Logo Design ($1500)",
-    "Full Package + Basic Maintenance ($1600/month)",
-    "Full Package + Pro Maintenance ($1750/month)",
-    "Full Package + On-Call Support ($2000/month)",
+    "Website + Maintenance ($1500)",
+    "Full Package + Maintenance ($2500)",
     "Custom Quote",
   ];
 

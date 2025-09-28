@@ -6,7 +6,7 @@ import { StripeCheckoutForm } from "./StripeCheckoutForm";
 
 export function Services() {
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [customerInfo, setCustomerInfo] = useState({ name: "", email: "" });
+  const [customerInfo, setCustomerInfo] = useState({ name: "", email: "", projectIdea: "" });
   const [showConsultationForm, setShowConsultationForm] = useState(false);
   const [consultationSubmitted, setConsultationSubmitted] = useState(false);
   const [submittedServiceData, setSubmittedServiceData] = useState<any>(null);
@@ -27,14 +27,14 @@ export function Services() {
         "Database integration",
         "Hosting setup",
         "SSL certificate",
-        "Basic SEO optimization"
+        "Up to 5 Pages   "
       ],
       color: "cyan"
     },
     {
       id: "website-logo",
       title: "Website + Logo Design",
-      price: 1500,
+      price: 2000,
       description: "Complete package with custom logo design",
       features: [
         "Everything in Website Development",
@@ -50,56 +50,25 @@ export function Services() {
 
   const maintenanceTiers = [
     {
-      id: "basic-maintenance",
-      title: "Basic Maintenance",
-      price: 100,
-      description: "Essential updates and monitoring",
+      id: "maintenance",
+      title: "Maintenance",
+      price: 500,
+      description: "Ongoing support, updates, and technical maintenance for your website.",
       features: [
         "Monthly security updates",
-        "Basic performance monitoring",
-        "Content updates (up to 2 hours/month)",
-        "Email support",
-        "Backup management"
+        "Performance monitoring",
+        "Content updates",
+        "Technical support",
+        "Backup management",
+        "SEO monitoring"
       ],
       color: "green",
-      isRecurring: true
-    },
-    {
-      id: "pro-maintenance",
-      title: "Pro Maintenance",
-      price: 250,
-      description: "Enhanced support and optimization",
-      features: [
-        "Everything in Basic",
-        "Weekly performance reports",
-        "Content updates (up to 5 hours/month)",
-        "Priority support",
-        "SEO monitoring",
-        "Analytics reporting"
-      ],
-      color: "blue",
-      isRecurring: true
-    },
-    {
-      id: "oncall-maintenance",
-      title: "On-Call Support",
-      price: 500,
-      description: "24/7 support and unlimited updates",
-      features: [
-        "Everything in Pro",
-        "24/7 emergency support",
-        "Unlimited content updates",
-        "Custom feature development",
-        "Advanced analytics",
-        "Dedicated account manager"
-      ],
-      color: "pink",
       isRecurring: true
     }
   ];
 
   const handleServiceClick = (service: any, tier?: any) => {
-    const serviceData = tier ? { ...service, tier, combinedPrice: service.price + tier.price } : service;
+    const serviceData = service ? (tier ? { ...service, tier, combinedPrice: service.price + tier.price } : service) : tier;
     setSubmittedServiceData(serviceData);
     setShowConsultationForm(true);
     setConsultationSubmitted(false);
@@ -115,15 +84,15 @@ export function Services() {
 
     try {
       // Submit consultation
+      const serviceName = submittedServiceData.tier ?
+        `${submittedServiceData.title} + ${submittedServiceData.tier.title}` :
+        submittedServiceData.title;
+      const message = `Interested in ${serviceName}. ${customerInfo.email}${customerInfo.projectIdea ? `. Project idea: ${customerInfo.projectIdea}` : ''}`;
       await submitConsultation({
         name: customerInfo.name,
         email: customerInfo.email,
-        message: `Interested in ${submittedServiceData.tier ? 
-          `${submittedServiceData.title} + ${submittedServiceData.tier.title}` : 
-          submittedServiceData.title}. ${customerInfo.email}`,
-        service: submittedServiceData.tier ? 
-          `${submittedServiceData.title} + ${submittedServiceData.tier.title}` : 
-          submittedServiceData.title,
+        message,
+        service: serviceName,
       });
 
       // Also record service selection
@@ -145,8 +114,10 @@ export function Services() {
   };
 
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [showGetStartedModal, setShowGetStartedModal] = useState(false);
 
   const handlePurchaseNow = (serviceData: any) => {
+    setSubmittedServiceData(serviceData);
     setShowCheckoutForm(true);
   };
 
@@ -177,7 +148,7 @@ export function Services() {
             </p>
             <p className="text-2xl font-bold text-white mt-2">
               ${submittedServiceData.combinedPrice || submittedServiceData.price}
-              {submittedServiceData.tier?.isRecurring && <span className="text-lg text-gray-400">/month</span>}
+              {(submittedServiceData.tier?.isRecurring || submittedServiceData.isRecurring) && <span className="text-lg text-gray-400">/month</span>}
             </p>
           </div>
 
@@ -204,6 +175,13 @@ export function Services() {
                   required
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors"
                 />
+                <textarea
+                  placeholder="Brief summary of your website idea (optional)"
+                  value={customerInfo.projectIdea}
+                  onChange={(e) => setCustomerInfo({ ...customerInfo, projectIdea: e.target.value })}
+                  rows={4}
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors resize-none"
+                />
                 
                 <div className="flex gap-4">
                   <button
@@ -222,13 +200,6 @@ export function Services() {
                 </div>
               </form>
             </div>
-          ) : showCheckoutForm ? (
-            <StripeCheckoutForm
-              serviceData={submittedServiceData}
-              customerInfo={customerInfo}
-              onSuccess={handlePaymentSuccess}
-              onCancel={handlePaymentCancel}
-            />
           ) : (
             <div className="space-y-6">
               <div className="cyber-card text-center">
@@ -239,7 +210,7 @@ export function Services() {
                 <p className="text-gray-300 mb-6">
                   We'll contact you within 24 hours to discuss your project and answer any questions.
                 </p>
-                
+
                 <div className="border-t border-gray-700 pt-6 mt-6">
                   <h4 className="text-lg font-semibold text-white mb-4">
                     Ready to move forward?
@@ -247,7 +218,7 @@ export function Services() {
                   <p className="text-gray-400 mb-6 text-sm">
                     While we recommend a consultation first, you can also purchase your selected service now if you're ready to proceed.
                   </p>
-                  
+
                   <div className="flex flex-col sm:flex-row gap-4">
                     <button
                       onClick={() => setShowConsultationForm(false)}
@@ -266,6 +237,21 @@ export function Services() {
               </div>
             </div>
           )}
+        </div>
+      </section>
+    );
+  }
+
+  if (showCheckoutForm) {
+    return (
+      <section className="min-h-screen px-6 pt-24 pb-12">
+        <div className="container mx-auto max-w-2xl">
+          <StripeCheckoutForm
+            serviceData={submittedServiceData}
+            customerInfo={customerInfo}
+            onSuccess={handlePaymentSuccess}
+            onCancel={handlePaymentCancel}
+          />
         </div>
       </section>
     );
@@ -315,6 +301,16 @@ export function Services() {
           ))}
         </div>
 
+        {/* Get Started Button */}
+        <div className="text-center mb-8">
+          <button
+            onClick={() => setShowGetStartedModal(true)}
+            className="neon-button neon-button-cyan"
+          >
+            Payments
+          </button>
+        </div>
+
         {/* Maintenance Tiers */}
         <div className="text-center mb-12">
           <h3 className="text-3xl font-bold mb-4 text-white">
@@ -325,7 +321,7 @@ export function Services() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="flex justify-center">
           {maintenanceTiers.map((tier) => (
             <div key={tier.id} className="cyber-card">
               <div className="text-center mb-6">
@@ -348,10 +344,7 @@ export function Services() {
               </ul>
               
               <button
-                onClick={() => {
-                  const baseService = services[0];
-                  handleServiceClick(baseService, tier);
-                }}
+                onClick={() => handleServiceClick(null, tier)}
                 className={`neon-button neon-button-${tier.color} w-full`}
               >
                 Get Free Consultation
@@ -359,6 +352,62 @@ export function Services() {
             </div>
           ))}
         </div>
+
+        {/* Get Started Modal */}
+        {showGetStartedModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4">
+              <h2 className="text-2xl font-bold text-white mb-6 text-center">Get Started</h2>
+              <div className="space-y-4">
+                <div className="cyber-card p-4">
+                  <h3 className="text-lg font-semibold text-cyan-400 mb-2">Deposit</h3>
+                  <p className="text-gray-300 mb-4">Amount: $500</p>
+                  <button
+                    className="neon-button neon-button-cyan w-full"
+                    onClick={() => {
+                      setShowGetStartedModal(false);
+                      handlePurchaseNow({ title: "Deposit", price: 500, id: "deposit" });
+                    }}
+                  >
+                    Purchase Deposit
+                  </button>
+                </div>
+                <div className="cyber-card p-4">
+                  <h3 className="text-lg font-semibold text-purple-400 mb-2">Final Payment</h3>
+                  <p className="text-gray-300 mb-4">Amount: $500</p>
+                  <button
+                    className="neon-button neon-button-purple w-full"
+                    onClick={() => {
+                      setShowGetStartedModal(false);
+                      handlePurchaseNow({ title: "Final Payment", price: 500, id: "final-payment" });
+                    }}
+                  >
+                    Purchase Final Payment
+                  </button>
+                </div>
+                <div className="cyber-card p-4">
+                  <h3 className="text-lg font-semibold text-green-400 mb-2">Final Payment (2)</h3>
+                  <p className="text-gray-300 mb-4">Amount: $1500</p>
+                  <button
+                    className="neon-button neon-button-green w-full"
+                    onClick={() => {
+                      setShowGetStartedModal(false);
+                      handlePurchaseNow({ title: "Final Payment (2)", price: 1500, id: "final-payment-2" });
+                    }}
+                  >
+                    Purchase Final Payment (2)
+                  </button>
+                </div>
+              </div>
+              <button
+                className="mt-6 w-full border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-colors"
+                onClick={() => setShowGetStartedModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
