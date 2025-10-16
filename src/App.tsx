@@ -17,7 +17,7 @@ export default function App() {
       case "services":
         return <Services />;
       case "projects":
-        return <Projects />;
+        return <Projects setActiveTab={setActiveTab} />;
       case "contact":
         return <Contact />;
       default:

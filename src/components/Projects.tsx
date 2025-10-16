@@ -1,33 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export function Projects() {
+interface ProjectsProps {
+  setActiveTab: (tab: string) => void;
+}
+
+export function Projects({ setActiveTab }: ProjectsProps) {
   const [currentVideo, setCurrentVideo] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isFading, setIsFading] = useState(false);
+  const [nextVideo, setNextVideo] = useState(1);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const projects = [
     {
       id: 1,
-      title: "E-Commerce Platform",
-      description: "Modern React-based shopping platform with real-time inventory",
+      title: "Community Gaming Blog ",
+      description: "Modern React-based gaming blog platform with real-time interaction",
       tech: ["React", "Node.js", "MongoDB", "Stripe"],
       video: "https://drive.google.com/file/d/1JADGEUyKb-vInSdQrnNUrpc9pGsBR8TR/view?usp=sharing",
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=450&fit=crop",
+      image: "/Phrest-team.png",
+      link: "https://example.com/gaming-blog",
     },
     {
       id: 2,
-      title: "SaaS Dashboard",
-      description: "Analytics dashboard with real-time data visualization",
+      title: "Retro Arcade",
+      description: "Old School Flash Games Presented in a Modern Way",
       tech: ["Vue.js", "Python", "PostgreSQL", "D3.js"],
       video: "/api/placeholder/800/450",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=450&fit=crop",
+      image: "/Nretrocade.png",
+      link: "https://example.com/retro-arcade",
     },
     {
       id: 3,
       title: "Mobile App Backend",
       description: "Scalable API for iOS/Android social media application",
-      tech: ["Express.js", "MongoDB", "Redis", "AWS"],
+      tech: ["React", "Node.js", "MongoDB", "Stripe"],
       video: "/api/placeholder/800/450",
-      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=450&fit=crop",
+      image: "/github-picture.png",
+      link: "https://example.com/mobile-backend",
     },
     {
       id: 4,
@@ -35,54 +47,39 @@ export function Projects() {
       description: "Creative portfolio with smooth animations and 3D elements",
       tech: ["Svelte", "Three.js", "GSAP", "Netlify"],
       video: "/api/placeholder/800/450",
-      image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&h=450&fit=crop",
+      image: "/youtube-picture.png",
+      link: "https://example.com/portfolio",
     },
   ];
 
-  // Helper function to render video player based on source
+  useEffect(() => {
+    if (!isPaused) {
+      const interval = setInterval(() => {
+        setIsFading(true);
+        setTimeout(() => {
+          setCurrentVideo((prev) => {
+            const next = (prev + 1) % projects.length;
+            setNextVideo(next);
+            return next;
+          });
+          setIsFading(false);
+        }, 1000); // fade duration 1s
+      }, 7000);
+      return () => clearInterval(interval);
+    }
+  }, [isPaused, projects.length]);
+
+  // Helper function to render photo instead of video player
   const renderVideoPlayer = () => {
-    if (!isPlaying) {
-      return (
-        <>
-          <img
-            src={projects[currentVideo].image}
-            alt={projects[currentVideo].title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <button
-              onClick={() => setIsPlaying(true)}
-              className="w-20 h-20 bg-cyan-500/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-cyan-400 hover:bg-cyan-500/30 transition-all duration-300 group"
-            >
-              <svg className="w-8 h-8 text-cyan-400 ml-1 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </button>
-          </div>
-        </>
-      );
-    }
-
-    if (projects[currentVideo].video.includes('drive.google.com')) {
-      const videoId = projects[currentVideo].video.match(/\/d\/([^\/]+)/)?.[1] || '';
-      return (
-        <iframe
-          src={`https://drive.google.com/file/d/${videoId}/preview`}
-          className="w-full h-full"
-          frameBorder="0"
-          allowFullScreen
-        />
-      );
-    }
-
     return (
-      <video
-        src={projects[currentVideo].video}
-        autoPlay
-        controls
-        className="w-full h-full object-cover"
-      />
+      <>
+        <img
+          src={projects[currentVideo].image}
+          alt={projects[currentVideo].title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
+      </>
     );
   };
 
@@ -100,7 +97,11 @@ export function Projects() {
 
         {/* Video Carousel */}
         <div className="mb-12">
-          <div className="relative bg-gray-800 rounded-xl overflow-hidden shadow-2xl">
+          <div
+            className="relative bg-gray-800 rounded-xl overflow-hidden shadow-2xl"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
             <div className="aspect-video relative">
               {renderVideoPlayer()}
 
@@ -154,8 +155,8 @@ export function Projects() {
                 currentVideo === index ? "ring-2 ring-cyan-400" : ""
               }`}
               onClick={() => {
-                setCurrentVideo(index);
-                setIsPlaying(false);
+                setSelectedProject(project);
+                setIsModalOpen(true);
               }}
             >
               <div className="aspect-video mb-4 rounded-lg overflow-hidden">
@@ -197,11 +198,45 @@ export function Projects() {
             Let's discuss your vision and create something amazing together.
             Our team is ready to bring your ideas to life.
           </p>
-          <button className="neon-button neon-button-cyan">
+          <button
+            className="neon-button neon-button-cyan"
+            onClick={() => setActiveTab("services")}
+          >
             Get Started Today
           </button>
         </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && selectedProject && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-gray-800 border border-cyan-500/30 rounded-xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <h3 className="text-2xl font-bold text-cyan-400 mb-4">
+              {selectedProject.title}
+            </h3>
+            <p className="text-gray-300 mb-6">
+              {selectedProject.description}
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                className="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-400 transition-colors"
+                onClick={() => {
+                  window.open(selectedProject.link, '_blank');
+                  setIsModalOpen(false);
+                }}
+              >
+                View Project
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

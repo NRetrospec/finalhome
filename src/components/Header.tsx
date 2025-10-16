@@ -22,12 +22,8 @@ export function Header({ activeTab, setActiveTab }: HeaderProps) {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-lg flex items-center justify-center">
-              <span className="text-xl font-bold text-black">&lt;/&gt;</span>
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              N Retrospec
-            </span>
+            
+            <img src="/Nretrospec logos FINALS-word.png" alt="N Retrospec" className="h-60 absolute left-30 top-[-70px]  w-auto z-10" />
           </div>
           
           <nav className="hidden md:flex space-x-1">
