@@ -25,81 +25,68 @@ export function Projects({ setActiveTab }: ProjectsProps) {
   const [shuffledProjects, setShuffledProjects] = useState<any[]>([]);
   const [cycleCount, setCycleCount] = useState(0);
 
-  // All 10 projects - expanded from original 4
+  // Portfolio projects - showcasing work across different industries
   const projects = [
     {
       id: 1,
-      title: "Community Gaming Site (Phresh Team) ",
-      description: "PhreshTeamTV is a thrilling cyberpunk gaming platform where players dive into quests, climb leaderboards, and level up their profiles in a neon-lit virtual world! 🚀 With features like personalized dashboards, real-time quest tracking, and global rankings, it's all about earning XP, unlocking rewards, and competing with friends. Built with React 18, TypeScript, and powered by Clerk for auth and Convex for the backend, this app delivers smooth animations via Framer Motion and a sleek UI with Tailwind CSS and shadcn/ui. Ready to hack the leaderboard? 🎮✨",
-      tech: ["React", "Node.js", "", "Stripe"],
+      title: "Phresh Team — Gaming Community",
+      description: "A cyberpunk-themed gaming platform with user profiles, leaderboards, quest tracking, and XP rewards. Features secure authentication, real-time updates, and smooth animations throughout.",
+      tech: ["React", "TypeScript", "Convex", "Stripe"],
       video: "https://drive.google.com/file/d/1JADGEUyKb-vInSdQrnNUrpc9pGsBR8TR/view?usp=sharing",
       image: "/PhreshTeamCover.png",
       link: "https://phreshteam.tv/",
+      industry: "Gaming"
     },
     {
       id: 2,
-      title: "Retro Online Arcade (NRetrocade)",
-      description: "Nretrocade is a nostalgic blast from the past—a retro gaming paradise where you can dive into classic Flash games with friends! Built with React and TypeScript on the frontend, powered by Convex for real-time backend magic, and styled with Tailwind CSS for that pixel-perfect vibe, it features user authentication via Clerk, social panels for friends and guilds, XP leveling, and even ad integration. Relive the 90s and 2000s with seamless gameplay, all wrapped in a sleek, responsive interface!",
-      tech: ["React", "Typescirpt", "Clerk", "Convex"],
+      title: "NRetrocade — Retro Arcade",
+      description: "A nostalgic online arcade featuring classic Flash-era games with friends lists, guilds, and XP leveling. Users can play together, track progress, and compete on leaderboards.",
+      tech: ["React", "TypeScript", "Clerk", "Convex"],
       video: "/api/placeholder/800/450",
       image: "/Nretrocade.png",
       link: "https://nretrocade.com/",
+      industry: "Entertainment"
     },
     {
       id: 3,
-      title: "Amazon DSP Site",
-      description: "This site is an informational overview for a Delivery Service Partner (DSP), designed to provide clear insight into day-to-day operations. It outlines what a typical workday looks like for drivers, including workload expectations, delivery areas covered, and average package volume handled per route. The goal is to set transparent expectations and give viewers a practical understanding of the scope and demands of the role.",
-      tech: ["Javascript", "HTML", "Tailwind CSS", "React"],
+      title: "Galo Logistics — Delivery Service",
+      description: "An informational site for an Amazon DSP, providing transparency about driver roles, daily operations, delivery areas, and workload expectations for potential employees.",
+      tech: ["React", "JavaScript", "Tailwind CSS"],
       video: "/api/placeholder/800/450",
       image: "/Galo-Cover.png",
       link: "https://bright-crisp-a0051e.netlify.app/",
+      industry: "Logistics"
     },
     {
       id: 4,
-      title: "Gym Membership Site",
-      description: "GymFlow Pro is your ultimate gym buddy in app form! Pump up your fitness game with features like class bookings, membership management, and a sleek dashboard to track your progress—all wrapped in a secure, user-friendly interface. Built with the power trio of React, TypeScript, and Vite for lightning-fast performance, styled with Tailwind CSS and shadcn-ui components, and backed by Convex for robust data handling and Clerk for seamless authentication. Get ready to flex those digital muscles! 💪",
-      tech: ["  CSS", "Clerk", "TypeScript", "Netlify"],
+      title: "GymFlow Pro — Fitness Studio",
+      description: "A gym membership platform with class booking, membership management, and progress tracking. Clean dashboard interface with secure user authentication.",
+      tech: ["React", "TypeScript", "Clerk", "Convex"],
       video: "/api/placeholder/800/450",
       image: "/gym-cover.png",
       link: "https://gym-brostho.netlify.app/",
+      industry: "Fitness"
     },
     {
       id: 5,
-      title: "Pixel Poke Arena",
-      description: "Pixel Poke Arena is an exciting turn-based strategy game where players command Pokémon armies on an 8x5 grid battlefield. Deploy your creatures via drag-and-drop, watch them advance automatically, and engage in tactical combat against AI opponents. Built with React, TypeScript, Vite, Tailwind CSS, and shadcn/ui for a modern, responsive web experience.",
-      tech: ["Next.js", "TypeScript", "Tailwind", "Vite"],
+      title: "Pixel Poke Arena — Strategy Game",
+      description: "A turn-based strategy game with drag-and-drop deployment, grid-based combat, and AI opponents. Fully responsive with modern UI components.",
+      tech: ["React", "TypeScript", "Tailwind", "Vite"],
       video: "/api/placeholder/800/450",
       image: "/Poke-AreaCover.png",
       link: "https://pixelpokearena.netlify.app/",
+      industry: "Gaming"
     },
     {
       id: 6,
-      title: "Online Bookstore   -    (Lofi Reads)",
-      description: "Lofi Reads is a cozy book store application featuring a catalog of books across various genres, with shopping cart and wishlist functionality, built using React, Vite, TypeScript, Tailwind CSS, and shadcn/ui components",
-      tech: ["React", "TypeScript", "Stripe", "Express"],
+      title: "Lofi Reads — Online Bookstore",
+      description: "A cozy e-commerce bookstore with product catalog, shopping cart, wishlist, and checkout. Browse by genre, save favorites, and purchase seamlessly.",
+      tech: ["React", "TypeScript", "Stripe", "Tailwind"],
       video: "/api/placeholder/800/450",
       image: "/Bookstorecover.png",
       link: "https://lofireads.netlify.app/",
+      industry: "E-commerce"
     },
-    {
-      id: 7,
-      title: "Git Hub Repos",
-      description: "Dive into all repos created",
-      tech: ["React", "Node.js", "MongoDB", "Stripe"],
-      video: "/api/placeholder/800/450",
-      image: "/github-picture.png",
-      link: "https://github.com/NRetrospec",
-    },
-    {
-      id: 8,
-      title: "Youtube",
-      description: "Content",
-      tech: ["React", "OpenWeather API", "Chart.js", "Leaflet"],
-      video: "/api/placeholder/800/450",
-      image: "/youtube-picture.png",
-      link: "https://www.youtube.com/@NRetrospec",
-    },
-    
   ];
 
   // Initialize shuffled projects on mount
@@ -213,8 +200,8 @@ export function Projects({ setActiveTab }: ProjectsProps) {
           </div>
         </div>
 
-        {/* Project Grid - All 10 Projects */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* Project Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => {
             // Check if this project is currently displayed in the carousel
             const isCurrentlyShown = shuffledProjects.length > 0 &&
@@ -223,7 +210,7 @@ export function Projects({ setActiveTab }: ProjectsProps) {
             return (
               <div
                 key={project.id}
-                className={`cyber-card cursor-pointer transition-all duration-300 hover:scale-105 ${
+                className={`cyber-card cursor-pointer transition-all duration-300 hover:scale-[1.02] ${
                   isCurrentlyShown ? "ring-2 ring-cyan-400" : ""
                 }`}
                 onClick={() => {
@@ -231,19 +218,23 @@ export function Projects({ setActiveTab }: ProjectsProps) {
                   setIsModalOpen(true);
                 }}
               >
-                <div className="aspect-video mb-4 rounded-lg overflow-hidden">
+                <div className="aspect-video mb-4 rounded-lg overflow-hidden relative">
                   <img
                     src={project.image}
                     alt={project.title}
                     className="w-full h-full object-cover"
                   />
+                  {/* Industry badge */}
+                  <span className="absolute top-2 right-2 px-2 py-1 bg-gray-900/80 text-cyan-400 text-xs font-medium rounded backdrop-blur-sm">
+                    {project.industry}
+                  </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-cyan-400 mb-2">
+                <h3 className="text-lg font-bold text-cyan-400 mb-2">
                   {project.title}
                 </h3>
 
-                <p className="text-gray-300 mb-4 text-sm">
+                <p className="text-gray-300 mb-4 text-sm line-clamp-2">
                   {project.description}
                 </p>
 
@@ -251,7 +242,7 @@ export function Projects({ setActiveTab }: ProjectsProps) {
                   {project.tech.map((tech) => (
                     <span
                       key={tech}
-                      className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-sm border border-purple-500/30"
+                      className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs border border-purple-500/30"
                     >
                       {tech}
                     </span>
@@ -282,29 +273,65 @@ export function Projects({ setActiveTab }: ProjectsProps) {
 
       {/* Modal */}
       {isModalOpen && selectedProject && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-gray-800 border border-cyan-500/30 rounded-xl p-8 max-w-md w-full mx-4 shadow-2xl">
-            <h3 className="text-2xl font-bold text-cyan-400 mb-4">
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="bg-gray-800 border border-cyan-500/30 rounded-xl p-6 max-w-lg w-full shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Project image */}
+            <div className="aspect-video mb-4 rounded-lg overflow-hidden">
+              <img
+                src={selectedProject.image}
+                alt={selectedProject.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Industry badge */}
+            <span className="inline-block px-2 py-1 bg-cyan-500/20 text-cyan-400 text-xs font-medium rounded mb-3">
+              {selectedProject.industry}
+            </span>
+
+            <h3 className="text-2xl font-bold text-white mb-3">
               {selectedProject.title}
             </h3>
-            <p className="text-gray-300 mb-6">
+
+            <p className="text-gray-300 mb-4">
               {selectedProject.description}
             </p>
-            <div className="flex justify-end space-x-4">
+
+            {/* Tech stack */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {selectedProject.tech.map((tech: string) => (
+                <span
+                  key={tech}
+                  className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs border border-purple-500/30"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
-                className="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-400 transition-colors"
+                className="flex-1 px-4 py-3 bg-cyan-500 text-white font-medium rounded-lg hover:bg-cyan-400 transition-colors"
                 onClick={() => {
                   window.open(selectedProject.link, '_blank');
-                  setIsModalOpen(false);
                 }}
               >
-                View Project
+                View Live Site
+              </button>
+              <button
+                className="flex-1 px-4 py-3 border border-purple-500 text-purple-400 font-medium rounded-lg hover:bg-purple-500/10 transition-colors"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setActiveTab("services");
+                }}
+              >
+                Want Something Similar?
               </button>
             </div>
           </div>

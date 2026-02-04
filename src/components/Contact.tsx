@@ -11,13 +11,15 @@ export function Contact() {
     service: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const submitConsultation = useMutation(api.services.submitConsultation);
 
   const services = [
-    "Website Development ($1000)",
-    "Website + Maintenance ($1500)",
-    "Full Package + Maintenance ($2500)",
+    "Website Development — $1,000",
+    "Website + Logo Design — $2,000",
+    "Website + Maintenance — $1,000 + $500/mo",
+    "Website + Logo + Maintenance — $2,000 + $500/mo",
     "Custom Quote",
   ];
 
@@ -38,9 +40,9 @@ export function Contact() {
         message: formData.message,
         service: formData.service || undefined,
       });
-      
-      toast.success("Message sent! We'll get back to you within 24 hours.");
-      setFormData({ name: "", email: "", message: "", service: "" });
+
+      setIsSubmitted(true);
+      toast.success("Message sent!");
     } catch (error) {
       toast.error("Failed to send message. Please try again.");
     } finally {
@@ -70,85 +72,139 @@ export function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div className="cyber-card">
-            <h3 className="text-2xl font-bold text-cyan-400 mb-6">Send us a message</h3>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-                  Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors"
-                  placeholder="Your full name"
-                />
-              </div>
+            {!isSubmitted ? (
+              <>
+                <h3 className="text-2xl font-bold text-cyan-400 mb-6">Send us a message</h3>
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors"
-                  placeholder="your.email@example.com"
-                />
-              </div>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+                      Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors"
+                      placeholder="Your name"
+                    />
+                  </div>
 
-              <div>
-                <label htmlFor="service" className="block text-sm font-medium text-gray-300 mb-2">
-                  Interested Service
-                </label>
-                <select
-                  id="service"
-                  name="service"
-                  value={formData.service}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors"
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors"
+                      placeholder="you@example.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="service" className="block text-sm font-medium text-gray-300 mb-2">
+                      Interested In
+                    </label>
+                    <select
+                      id="service"
+                      name="service"
+                      value={formData.service}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors"
+                    >
+                      <option value="">Select a service (optional)</option>
+                      {services.map((service) => (
+                        <option key={service} value={service}>
+                          {service}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+                      Tell us about your project *
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
+                      rows={5}
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors resize-none"
+                      placeholder="What does your business do? What kind of site do you need?"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="neon-button neon-button-cyan w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </button>
+
+                  {/* Reassurance copy */}
+                  <p className="text-gray-500 text-xs text-center">
+                    No spam. No pressure. We'll reply within 24 hours with honest feedback.
+                  </p>
+                </form>
+
+                {/* Alternative contact */}
+                <div className="mt-6 pt-6 border-t border-gray-700 text-center">
+                  <p className="text-gray-400 text-sm">
+                    Prefer email?{" "}
+                    <a
+                      href="mailto:marquisejones@nretrospec.com"
+                      className="text-cyan-400 hover:underline"
+                    >
+                      marquisejones@nretrospec.com
+                    </a>
+                  </p>
+                </div>
+              </>
+            ) : (
+              /* Success state */
+              <div className="text-center py-8">
+                <div className="text-5xl mb-4">✓</div>
+                <h3 className="text-2xl font-bold text-green-400 mb-4">Message Sent!</h3>
+                <p className="text-gray-300 mb-6">Thanks for reaching out. Here's what happens next:</p>
+
+                <div className="text-left space-y-3 mb-8">
+                  <div className="flex items-start gap-3">
+                    <span className="text-cyan-400 font-bold">1.</span>
+                    <p className="text-gray-300">We'll review your message and email you within 24 hours</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-cyan-400 font-bold">2.</span>
+                    <p className="text-gray-300">We'll schedule a quick call to understand your goals</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-cyan-400 font-bold">3.</span>
+                    <p className="text-gray-300">You'll receive a custom proposal within 3-5 days</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setIsSubmitted(false);
+                    setFormData({ name: "", email: "", message: "", service: "" });
+                  }}
+                  className="text-cyan-400 hover:underline text-sm"
                 >
-                  <option value="">Select a service (optional)</option>
-                  {services.map((service) => (
-                    <option key={service} value={service}>
-                      {service}
-                    </option>
-                  ))}
-                </select>
+                  Send another message
+                </button>
               </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
-                  Message *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  required
-                  rows={6}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-cyan-500 focus:outline-none transition-colors resize-none"
-                  placeholder="Tell us about your project, timeline, and any specific requirements..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="neon-button neon-button-cyan w-full disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Sending..." : "Send Message"}
-              </button>
-            </form>
+            )}
           </div>
 
           {/* Contact Info */}

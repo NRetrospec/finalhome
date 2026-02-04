@@ -20,31 +20,33 @@ export function Services() {
       id: "website",
       title: "Website Development",
       price: 1000,
-      description: "Full stack development with hosting setup included",
+      description: "A professional website built from scratch, ready to launch",
       features: [
-        "Responsive design",
+        "Responsive design (mobile + desktop)",
         "Modern framework (React/Vue/Svelte)",
         "Database integration",
-        "Hosting setup",
-        "SSL certificate",
-        "Up to 5 Pages   "
+        "Hosting setup included",
+        "SSL certificate (secure site)",
+        "Up to 5 pages"
       ],
-      color: "cyan"
+      color: "cyan",
+      popular: false
     },
     {
       id: "website-logo",
       title: "Website + Logo Design",
       price: 2000,
-      description: "Complete package with custom logo design",
+      description: "Complete branding package — your site plus a custom logo",
       features: [
         "Everything in Website Development",
-        "Custom logo design",
+        "Custom logo design (3 concepts)",
         "Brand color palette",
         "Logo variations (light/dark)",
         "High-resolution files",
-        "Brand guidelines"
+        "Brand guidelines document"
       ],
-      color: "purple"
+      color: "purple",
+      popular: true
     }
   ];
 
@@ -114,7 +116,6 @@ export function Services() {
   };
 
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
-  const [showGetStartedModal, setShowGetStartedModal] = useState(false);
 
   const handlePurchaseNow = (serviceData: any) => {
     setSubmittedServiceData(serviceData);
@@ -270,18 +271,28 @@ export function Services() {
         </div>
 
         {/* Main Services */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 pt-4">
           {services.map((service) => (
-            <div key={service.id} className="cyber-card">
-              <div className="flex justify-between items-start mb-4">
+            <div key={service.id} className={`cyber-card relative overflow-visible ${service.popular ? 'ring-2 ring-purple-500/50' : ''}`}>
+              {service.popular && (
+                <div className="absolute top-2 right-4 z-10">
+                  <span className="bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                    Most Popular
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between items-start mb-4 mt-2">
                 <h3 className={`text-2xl font-bold text-${service.color}-400`}>
                   {service.title}
                 </h3>
-                <span className="text-3xl font-bold text-white">${service.price}</span>
+                <div className="text-right">
+                  <span className="text-3xl font-bold text-white">${service.price}</span>
+                  <p className="text-xs text-gray-500">one-time payment</p>
+                </div>
               </div>
-              
-              <p className="text-gray-300 mb-6">{service.description}</p>
-              
+
+              <p className="text-gray-200 mb-6">{service.description}</p>
+
               <ul className="space-y-2 mb-6">
                 {service.features.map((feature, index) => (
                   <li key={index} className="flex items-center text-gray-300">
@@ -290,7 +301,7 @@ export function Services() {
                   </li>
                 ))}
               </ul>
-              
+
               <button
                 onClick={() => handleServiceClick(service)}
                 className={`neon-button neon-button-${service.color} w-full`}
@@ -301,113 +312,52 @@ export function Services() {
           ))}
         </div>
 
-        {/* Get Started Button */}
-        <div className="text-center mb-8">
-          <button
-            onClick={() => setShowGetStartedModal(true)}
-            className="neon-button neon-button-cyan"
-          >
-            Payments
-          </button>
-        </div>
-
-        {/* Maintenance Tiers */}
+        {/* Trust copy */}
         <div className="text-center mb-12">
-          <h3 className="text-3xl font-bold mb-4 text-white">
-            Add Ongoing Maintenance
-          </h3>
-          <p className="text-gray-300">
-            Keep your website running smoothly with our maintenance plans
+          <p className="text-gray-400 text-sm">
+            50% deposit to start · Final payment when you're happy · No hidden fees
           </p>
         </div>
 
-        <div className="flex justify-center">
-          {maintenanceTiers.map((tier) => (
-            <div key={tier.id} className="cyber-card">
-              <div className="text-center mb-6">
-                <h4 className={`text-xl font-bold text-${tier.color}-400 mb-2`}>
-                  {tier.title}
-                </h4>
-                <div className="text-3xl font-bold text-white mb-2">
-                  ${tier.price}<span className="text-lg text-gray-400">/month</span>
+        {/* Maintenance Add-on */}
+        <div className="max-w-2xl mx-auto">
+          <div className="cyber-card border-green-500/30">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-green-400 text-xl">+</span>
+                  <h3 className="text-xl font-bold text-green-400">
+                    Optional: Ongoing Maintenance
+                  </h3>
                 </div>
-                <p className="text-gray-300">{tier.description}</p>
+                <p className="text-gray-300 mb-4">
+                  Don't want to worry about updates, security, or performance? We'll handle it.
+                </p>
+                <ul className="grid grid-cols-2 gap-2 text-sm">
+                  {maintenanceTiers[0].features.map((feature, index) => (
+                    <li key={index} className="flex items-center text-gray-400">
+                      <span className="text-green-400 mr-2">✓</span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              
-              <ul className="space-y-2 mb-6">
-                {tier.features.map((feature, index) => (
-                  <li key={index} className="flex items-center text-gray-300 text-sm">
-                    <span className={`text-${tier.color}-400 mr-2`}>✓</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              
-              <button
-                onClick={() => handleServiceClick(null, tier)}
-                className={`neon-button neon-button-${tier.color} w-full`}
-              >
-                Get Free Consultation
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Get Started Modal */}
-        {showGetStartedModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4">
-              <h2 className="text-2xl font-bold text-white mb-6 text-center">Get Started</h2>
-              <div className="space-y-4">
-                <div className="cyber-card p-4">
-                  <h3 className="text-lg font-semibold text-cyan-400 mb-2">Deposit</h3>
-                  <p className="text-gray-300 mb-4">Amount: $500</p>
-                  <button
-                    className="neon-button neon-button-cyan w-full"
-                    onClick={() => {
-                      setShowGetStartedModal(false);
-                      handlePurchaseNow({ title: "Deposit", price: 500, id: "deposit" });
-                    }}
-                  >
-                    Purchase Deposit
-                  </button>
+              <div className="text-center md:text-right">
+                <div className="text-3xl font-bold text-white mb-1">
+                  $500<span className="text-lg text-gray-400">/mo</span>
                 </div>
-                <div className="cyber-card p-4">
-                  <h3 className="text-lg font-semibold text-purple-400 mb-2">Final Payment</h3>
-                  <p className="text-gray-300 mb-4">Amount: $500</p>
-                  <button
-                    className="neon-button neon-button-purple w-full"
-                    onClick={() => {
-                      setShowGetStartedModal(false);
-                      handlePurchaseNow({ title: "Final Payment", price: 500, id: "final-payment" });
-                    }}
-                  >
-                    Purchase Final Payment
-                  </button>
-                </div>
-                <div className="cyber-card p-4">
-                  <h3 className="text-lg font-semibold text-green-400 mb-2">Final Payment (2)</h3>
-                  <p className="text-gray-300 mb-4">Amount: $1500</p>
-                  <button
-                    className="neon-button neon-button-green w-full"
-                    onClick={() => {
-                      setShowGetStartedModal(false);
-                      handlePurchaseNow({ title: "Final Payment (2)", price: 1500, id: "final-payment-2" });
-                    }}
-                  >
-                    Purchase Final Payment (2)
-                  </button>
-                </div>
+                <p className="text-xs text-gray-500 mb-4">Cancel anytime</p>
+                <button
+                  onClick={() => handleServiceClick(null, maintenanceTiers[0])}
+                  className="neon-button neon-button-green"
+                >
+                  Add to Any Package
+                </button>
               </div>
-              <button
-                className="mt-6 w-full border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-colors"
-                onClick={() => setShowGetStartedModal(false)}
-              >
-                Close
-              </button>
             </div>
           </div>
-        )}
+        </div>
+
       </div>
     </section>
   );
