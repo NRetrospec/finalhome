@@ -23,7 +23,7 @@ export function Header({ activeTab, setActiveTab }: HeaderProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             
-            <img src="/Nretrospec logos FINALS1.png" alt="N Retrospec" className="h-60 absolute left-30 top-[-70px]  w-auto z-10" />
+            <img src="/Nretrospec logos FINALS1.png" alt="N Retrospec" className="h-60 absolute left-30 top-[-70px] w-auto z-10 cursor-pointer" onClick={() => setActiveTab("home")} />
           </div>
           
           <nav className="hidden md:flex space-x-1">

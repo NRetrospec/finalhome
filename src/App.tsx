@@ -5,10 +5,20 @@ import { Hero } from "./components/Hero";
 import { Services } from "./components/Services";
 import { Projects } from "./components/Projects";
 import { Contact } from "./components/Contact";
+import { SplashScreen } from "./components/SplashScreen";
+import { AnimatedBackground } from "./components/AnimatedBackground";
 import "./styles/animations.css";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("home");
+  const [showSplash, setShowSplash] = useState(
+    () => !sessionStorage.getItem('nretrospec-intro-seen')
+  );
+
+  const handleSplashDone = () => {
+    sessionStorage.setItem('nretrospec-intro-seen', '1');
+    setShowSplash(false);
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -26,8 +36,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <div className="cyber-grid"></div>
+    <div className="min-h-screen text-white" style={{ background: 'radial-gradient(circle at center, #0a0f1a 0%, #111827 100%)' }}>
+      {showSplash && <SplashScreen onDone={handleSplashDone} />}
+      <AnimatedBackground />
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       <main className="relative z-10">
         {renderContent()}

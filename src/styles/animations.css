@@ -1,21 +1,42 @@
-/* Cyber Grid Background */
-.cyber-grid {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: grid-move 20s linear infinite;
-  z-index: 0;
+/* Animated Background Orbs */
+.bg-orb-1 {
+  position: absolute;
+  left: 15%;
+  top: 30%;
+  width: clamp(200px, 30vw, 420px);
+  height: clamp(200px, 30vw, 420px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 70%);
+  filter: blur(60px);
+  animation: orb1-float 9s ease-in-out infinite;
+  transform: translate(-50%, -50%);
 }
 
-@keyframes grid-move {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
+.bg-orb-2 {
+  position: absolute;
+  right: 15%;
+  bottom: 25%;
+  width: clamp(150px, 24vw, 320px);
+  height: clamp(150px, 24vw, 320px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, transparent 70%);
+  filter: blur(50px);
+  animation: orb2-float 12s ease-in-out infinite;
+  transform: translate(50%, 50%);
+}
+
+@keyframes orb1-float {
+  0%,  100% { transform: translate(-50%, -50%) translate(0px,   0px); }
+  25%        { transform: translate(-50%, -50%) translate(50px,  30px); }
+  50%        { transform: translate(-50%, -50%) translate(20px, -20px); }
+  75%        { transform: translate(-50%, -50%) translate(-30px, 20px); }
+}
+
+@keyframes orb2-float {
+  0%,  100% { transform: translate(50%, 50%) translate(0px,   0px); }
+  25%        { transform: translate(50%, 50%) translate(-40px, 50px); }
+  50%        { transform: translate(50%, 50%) translate(30px,  20px); }
+  75%        { transform: translate(50%, 50%) translate(20px, -30px); }
 }
 
 /* Glow Animation */
