@@ -1,29 +1,15 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 interface ProjectsProps {
   setActiveTab: (tab: string) => void;
 }
 
-// Fisher-Yates shuffle algorithm for randomizing array
-const shuffleArray = <T,>(array: T[]): T[] => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
-
 export function Projects({ setActiveTab }: ProjectsProps) {
   const [currentVideo, setCurrentVideo] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isFading, setIsFading] = useState(false);
-  const [nextVideo, setNextVideo] = useState(1);
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [shuffledProjects, setShuffledProjects] = useState<any[]>([]);
-  const [cycleCount, setCycleCount] = useState(0);
 
   // Portfolio projects - showcasing work across different industries
   const projects = [
@@ -79,55 +65,55 @@ export function Projects({ setActiveTab }: ProjectsProps) {
     },
     {
       id: 6,
-      title: "Lofi Reads — Online Bookstore",
-      description: "A cozy e-commerce bookstore with product catalog, shopping cart, wishlist, and checkout. Browse by genre, save favorites, and purchase seamlessly.",
+      title: "Jenesis Beatz — Online Beatstore",
+      description: "A premium online marketplace where artists can browse, preview, and purchase high-quality beats from talented producers. The platform features a dark, futuristic design with audio playback, shopping cart, favorites, and user authentication.",
       tech: ["React", "TypeScript", "Stripe", "Tailwind"],
       video: "/api/placeholder/800/450",
-      image: "/Bookstorecover.png",
-      link: "https://lofireads.netlify.app/",
+      image: "/music.png",
+      link: "https://jenesisbeats.netlify.app/",
       industry: "E-commerce"
     },
   ];
 
-  // Initialize shuffled projects on mount
+  // Carousel auto-rotation (no shuffle)
   useEffect(() => {
-    setShuffledProjects(shuffleArray(projects));
-  }, []);
-
-  // Carousel auto-rotation with shuffle on cycle completion
-  useEffect(() => {
-    if (!isPaused && shuffledProjects.length > 0) {
+    if (!isPaused) {
       const interval = setInterval(() => {
         setIsFading(true);
         setTimeout(() => {
-          setCurrentVideo((prev) => {
-            const next = (prev + 1) % shuffledProjects.length;
-
-            // Reshuffle when completing a full cycle (returning to index 0)
-            if (next === 0) {
-              setShuffledProjects(shuffleArray(projects));
-              setCycleCount((count) => count + 1);
-            }
-
-            setNextVideo(next);
-            return next;
-          });
+          setCurrentVideo((prev) => (prev + 1) % projects.length);
           setIsFading(false);
         }, 1000); // fade duration 1s
       }, 7000); // 7 second interval
       return () => clearInterval(interval);
     }
-  }, [isPaused, shuffledProjects.length]);
+  }, [isPaused]);
+
+  // Helper function to go to previous project
+  const goToPrevious = () => {
+    setIsFading(true);
+    setTimeout(() => {
+      setCurrentVideo((prev) => (prev - 1 + projects.length) % projects.length);
+      setIsFading(false);
+    }, 100);
+  };
+
+  // Helper function to go to next project
+  const goToNext = () => {
+    setIsFading(true);
+    setTimeout(() => {
+      setCurrentVideo((prev) => (prev + 1) % projects.length);
+      setIsFading(false);
+    }, 100);
+  };
 
   // Helper function to render photo instead of video player
   const renderVideoPlayer = () => {
-    if (shuffledProjects.length === 0) return null;
-
     return (
       <>
         <img
-          src={shuffledProjects[currentVideo].image}
-          alt={shuffledProjects[currentVideo].title}
+          src={projects[currentVideo].image}
+          alt={projects[currentVideo].title}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"></div>
@@ -157,38 +143,57 @@ export function Projects({ setActiveTab }: ProjectsProps) {
             <div className="aspect-video relative">
               {renderVideoPlayer()}
 
+              {/* Left Arrow Button */}
+              <button
+                onClick={goToPrevious}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-gray-900/80 hover:bg-cyan-500/80 text-white rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm"
+                aria-label="Previous project"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+              </button>
+
+              {/* Right Arrow Button */}
+              <button
+                onClick={goToNext}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-gray-900/80 hover:bg-cyan-500/80 text-white rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm"
+                aria-label="Next project"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </button>
+
               {/* Project info overlay */}
-              {shuffledProjects.length > 0 && (
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">
-                    {shuffledProjects[currentVideo].title}
-                  </h3>
-                  <p className="text-gray-300 mb-4">
-                    {shuffledProjects[currentVideo].description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {shuffledProjects[currentVideo].tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm border border-cyan-500/30"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  {projects[currentVideo].title}
+                </h3>
+                <p className="text-gray-300 mb-4">
+                  {projects[currentVideo].description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {projects[currentVideo].tech.map((tech: string) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm border border-cyan-500/30"
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
           {/* Video navigation */}
           <div className="flex justify-center mt-6 space-x-4">
-            {shuffledProjects.map((_, index) => (
+            {projects.map((_, index) => (
               <button
                 key={index}
                 onClick={() => {
                   setCurrentVideo(index);
-                  setIsPlaying(false);
                 }}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   currentVideo === index
@@ -204,8 +209,7 @@ export function Projects({ setActiveTab }: ProjectsProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => {
             // Check if this project is currently displayed in the carousel
-            const isCurrentlyShown = shuffledProjects.length > 0 &&
-              shuffledProjects[currentVideo]?.id === project.id;
+            const isCurrentlyShown = projects[currentVideo]?.id === project.id;
 
             return (
               <div
