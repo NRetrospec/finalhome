@@ -55,13 +55,13 @@ export function Projects({ setActiveTab }: ProjectsProps) {
     },
     {
       id: 5,
-      title: "Pixel Poke Arena — Strategy Game",
-      description: "A turn-based strategy game with drag-and-drop deployment, grid-based combat, and AI opponents. Fully responsive with modern UI components.",
+      title: "The Framer Thing",
+      description: "Futuristic digital agency portfolio website featuring an immersive 3D holographic interface. Built with Vite, Three.js, and GSAP, it showcases a scroll-driven 3D cube navigation system with 180+ animated frames creating a cinematic user experience.",
       tech: ["React", "TypeScript", "Tailwind", "Vite"],
       video: "/api/placeholder/800/450",
-      image: "/Poke-AreaCover.png",
-      link: "https://pixelpokearena.netlify.app/",
-      industry: "Gaming"
+      image: "/the-framer.png",
+      link: "https://jazzy-kringle-6688b1.netlify.app/",
+      industry: "Animation"
     },
     {
       id: 6,
