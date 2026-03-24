@@ -176,16 +176,27 @@ export const CallToAction: React.FC = () => {
                 marginBottom: 12,
               }}
             >
-              www.nretrospec.com
+              nretrospec.com
             </div>
             <div
               style={{
-                fontSize: 18,
+                fontSize: 20,
+                color: colors.cyan,
+                fontFamily: "Inter, system-ui, sans-serif",
+                fontWeight: 600,
+                marginBottom: 8,
+              }}
+            >
+              Starting at $1,000 · Delivered in 2–4 Weeks
+            </div>
+            <div
+              style={{
+                fontSize: 16,
                 color: colors.textMuted,
                 fontFamily: "Inter, system-ui, sans-serif",
               }}
             >
-              Custom Web Development • UI/UX Design • Performance
+              Custom Web Development · No Templates · Free Consultation
             </div>
           </div>
         )}
@@ -258,7 +269,7 @@ export const CallToAction: React.FC = () => {
             letterSpacing: 2,
           }}
         >
-          N RETROSPEC © 2024
+          N RETROSPEC © 2025
         </span>
       </div>
     </div>

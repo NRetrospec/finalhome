@@ -166,11 +166,11 @@ export function Projects({ setActiveTab }: ProjectsProps) {
               </button>
 
               {/* Project info overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6">
+              <div className="absolute bottom-0 left-0 right-0 p-6 hidden md:block">
                 <h3 className="text-2xl font-bold text-white mb-2">
                   {projects[currentVideo].title}
                 </h3>
-                <p className="text-gray-300 mb-4">
+                <p className="text-gray-300 mb-4 hidden md:block">
                   {projects[currentVideo].description}
                 </p>
                 <div className="flex flex-wrap gap-2">
