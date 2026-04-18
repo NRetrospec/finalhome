@@ -12,6 +12,7 @@ export function Header({ activeTab, setActiveTab }: HeaderProps) {
     { id: "services", label: "Services" },
     { id: "projects", label: "Projects" },
     { id: "contact", label: "Contact" },
+    { id: "clients", label: "Client Portal" },
   ];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);

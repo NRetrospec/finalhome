@@ -5,6 +5,7 @@ import { Hero } from "./components/Hero";
 import { Services } from "./components/Services";
 import { Projects } from "./components/Projects";
 import { Contact } from "./components/Contact";
+import { Clients } from "./components/Clients";
 import { SplashScreen } from "./components/SplashScreen";
 import { AnimatedBackground } from "./components/AnimatedBackground";
 import "./styles/animations.css";
@@ -30,6 +31,8 @@ export default function App() {
         return <Projects setActiveTab={setActiveTab} />;
       case "contact":
         return <Contact />;
+      case "clients":
+        return <Clients />;
       default:
         return <Hero setActiveTab={setActiveTab} />;
     }

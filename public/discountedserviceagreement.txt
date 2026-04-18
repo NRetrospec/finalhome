@@ -1,0 +1,68 @@
+**SERVICE AGREEMENT (DISCOUNTED PROJECT)**
+
+This Agreement is made between **N Retrospec** ("Developer") and **[Client Name]** ("Client") on **[Date]**.
+
+## 1. Scope of Work
+
+Developer agrees to create a basic website/web application. The project may include:
+
+* Frontend design and development
+* Basic backend functionality (if applicable)
+* Deployment of the website
+
+Any features not specifically discussed are **not included**.
+
+## 2. Discounted Rate
+
+Client acknowledges this project is being completed at a **heavily discounted rate of $100**, which is below standard pricing.
+
+## 3. Payment Terms
+
+* Full payment of **$100 is due upfront** before work begins.
+
+## 4. Revisions
+
+* Includes **up to 2 minor revisions**
+* Additional changes or new features may require extra payment
+
+## 5. Timeline
+
+* Estimated completion: **[X days/weeks]**
+* Timeline depends on client providing timely feedback and content
+
+## 6. Scope Changes
+
+Any work outside the original scope may:
+
+* Be declined, or
+* Require additional charges and timeline adjustments
+
+## 7. Ownership
+
+* Client receives full rights to the final product after full payment
+* Developer retains the right to reuse general, non-proprietary code and display the project in a portfolio
+
+## 8. Support
+
+* Includes **7 days of bug fixes after delivery**
+* Ongoing maintenance is not included
+
+## 9. Termination
+
+* Either party may terminate this agreement
+* Payment is **non-refundable once work has started**
+
+## 10. Liability
+
+Developer is not responsible for:
+
+* Third-party issues (hosting, APIs, platforms)
+* Any indirect or business-related losses
+
+## 11. Agreement
+
+By signing below, both parties agree to these terms.
+
+Client Signature: ____________________
+Developer Signature: ____________________
+Date: ____________________

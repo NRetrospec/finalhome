@@ -28,6 +28,24 @@ const applicationTables = {
     paymentStatus: v.string(),
     createdAt: v.number(),
   }).index("by_session", ["sessionId"]),
+
+  agreements: defineTable({
+    code: v.string(),
+    clientName: v.string(),
+    agreementType: v.union(v.literal("standard"), v.literal("discounted")),
+    price: v.string(),
+    timeline: v.string(),
+    hourlyRate: v.optional(v.string()),
+    customNotes: v.optional(v.string()),
+    status: v.union(v.literal("pending"), v.literal("signed")),
+    signature: v.optional(v.string()),
+    signatureType: v.optional(v.union(v.literal("drawn"), v.literal("typed"))),
+    signedAt: v.optional(v.number()),
+    signerIp: v.optional(v.string()),
+    signerUserAgent: v.optional(v.string()),
+    createdAt: v.number(),
+    expiresAt: v.optional(v.number()),
+  }).index("by_code", ["code"]),
 };
 
 export default defineSchema({

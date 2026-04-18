@@ -1,0 +1,95 @@
+**SERVICE AGREEMENT (STANDARD PROJECT)**
+
+This Agreement is made between **N Retrospec** ("Developer") and **[Client Name]** ("Client") on **[Date]**.
+
+## 1. Scope of Work
+
+Developer agrees to design and develop a **custom full-stack website/web application**, which may include:
+
+* Frontend UI/UX development
+* Backend development and database setup
+* API integrations (if applicable)
+* Deployment
+
+Specific features will be outlined and agreed upon before development begins.
+
+## 2. Project Fee
+
+Total project cost: **$1,000**
+
+## 3. Payment Terms
+
+* **50% upfront ($500)** before work begins
+* **50% ($500)** due before final delivery
+
+Failure to complete payment may result in:
+
+* Immediate work stoppage
+* Withholding of final files, code, and deployment
+
+## 4. Timeline
+
+* Estimated completion: **[X weeks]**
+* Timeline depends on:
+
+  * Client feedback within **3 business days**
+  * Timely delivery of required content and assets
+
+Client delays may extend the project timeline.
+
+## 5. Revisions
+
+* Includes **3 rounds of revisions**
+* Additional revisions or new features will be billed at **$[your hourly rate]/hour**
+
+## 6. Scope Changes
+
+Any requests outside the agreed scope will:
+
+* Require additional charges
+* Extend the project timeline
+
+No extra work will begin without client approval.
+
+## 7. Client Responsibilities
+
+Client agrees to:
+
+* Provide all necessary content, images, and information
+* Respond to requests in a timely manner
+* Supply access to any required accounts or services
+
+## 8. Ownership
+
+* Full ownership is transferred to the Client **only after full payment is received**
+* Developer retains the right to reuse general code and showcase the project in a portfolio
+
+## 9. Support & Maintenance
+
+* Includes **14 days of post-launch bug fixes**
+* Ongoing support or maintenance is not included unless agreed separately
+
+## 10. Termination
+
+* Either party may terminate this agreement
+* Deposit is **non-refundable**
+* Client is responsible for payment of all work completed up to termination
+
+## 11. Liability
+
+Developer is not liable for:
+
+* Third-party failures (hosting providers, APIs, etc.)
+* Loss of revenue, data, or business opportunities
+
+## 12. Governing Law
+
+This Agreement shall be governed by the laws of the State of **Florida**.
+
+## 13. Agreement
+
+By signing below, both parties agree to these terms.
+
+Client Signature: ____________________
+Developer Signature: ____________________
+Date: ____________________
