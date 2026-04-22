@@ -5,6 +5,8 @@ export interface AgreementData {
   timeline: string;
   hourlyRate?: string;
   customNotes?: string;
+  techStack?: string[];
+  revisions?: string;
   createdAt: number;
 }
 
@@ -30,7 +32,11 @@ export function getAgreementSections(data: AgreementData): AgreementSection[] {
     ? [{ type: "section", title: "Additional Notes", body: data.customNotes }]
     : [];
 
+  const techStackBullet =
+    data.techStack?.length ? [`Tech Stack: ${data.techStack.join(", ")}`] : [];
+
   if (data.agreementType === "discounted") {
+    const revisions = data.revisions ?? "2";
     return [
       { type: "header", title: "SERVICE AGREEMENT (DISCOUNTED PROJECT)" },
       {
@@ -42,6 +48,7 @@ export function getAgreementSections(data: AgreementData): AgreementSection[] {
         title: "1. Scope of Work",
         body: "Developer agrees to create a basic website/web application. The project may include:",
         bullets: [
+          ...techStackBullet,
           "Frontend design and development",
           "Basic backend functionality (if applicable)",
           "Deployment of the website",
@@ -62,7 +69,7 @@ export function getAgreementSections(data: AgreementData): AgreementSection[] {
         type: "section",
         title: "4. Revisions",
         bullets: [
-          "Includes up to 2 minor revisions",
+          `Includes up to ${revisions} minor revision${revisions === "1" ? "" : "s"}`,
           "Additional changes or new features may require extra payment",
         ],
       },
@@ -120,6 +127,7 @@ export function getAgreementSections(data: AgreementData): AgreementSection[] {
   }
 
   // Standard agreement
+  const revisions = data.revisions ?? "3";
   return [
     { type: "header", title: "SERVICE AGREEMENT (STANDARD PROJECT)" },
     {
@@ -131,6 +139,7 @@ export function getAgreementSections(data: AgreementData): AgreementSection[] {
       title: "1. Scope of Work",
       body: "Developer agrees to design and develop a custom full-stack website/web application, which may include:",
       bullets: [
+        ...techStackBullet,
         "Frontend UI/UX development",
         "Backend development and database setup",
         "API integrations (if applicable)",
@@ -163,7 +172,7 @@ export function getAgreementSections(data: AgreementData): AgreementSection[] {
       type: "section",
       title: "5. Revisions",
       bullets: [
-        "Includes 3 rounds of revisions",
+        `Includes ${revisions} round${revisions === "1" ? "" : "s"} of revisions`,
         data.hourlyRate
           ? `Additional revisions or new features will be billed at ${data.hourlyRate}/hour`
           : "Additional revisions or new features will be billed at an agreed hourly rate",

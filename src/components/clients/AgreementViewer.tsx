@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { SignaturePad } from "./SignaturePad";
 import { getAgreementSections } from "../../utils/agreementTemplates";
+import { downloadAgreementPDF } from "../../utils/generatePDF";
 import { toast } from "sonner";
 
 interface AgreementViewerProps {
@@ -23,6 +24,7 @@ async function getClientIP(): Promise<string | undefined> {
 export function AgreementViewer({ code, onSigned }: AgreementViewerProps) {
   const agreement = useQuery(api.agreements.getAgreementByCode, { code });
   const submitSignature = useMutation(api.agreements.submitSignedAgreement);
+  const sendEmail = useAction(api.agreements.sendAgreementEmail);
 
   const [signature, setSignature] = useState<string | null>(null);
   const [signatureType, setSignatureType] = useState<"drawn" | "typed">("drawn");
@@ -93,6 +95,8 @@ export function AgreementViewer({ code, onSigned }: AgreementViewerProps) {
     timeline: agreement.timeline,
     hourlyRate: agreement.hourlyRate,
     customNotes: agreement.customNotes,
+    techStack: agreement.techStack,
+    revisions: agreement.revisions,
     createdAt: agreement.createdAt,
   });
 
@@ -104,14 +108,44 @@ export function AgreementViewer({ code, onSigned }: AgreementViewerProps) {
     setIsSubmitting(true);
     try {
       const signerIp = await getClientIP();
+      const signedAt = Date.now();
+
       await submitSignature({
         code,
         signature,
         signatureType,
-        signedAt: Date.now(),
+        signedAt,
         signerIp,
         signerUserAgent: navigator.userAgent,
       });
+
+      // Generate PDF and trigger download
+      let pdfBase64: string | undefined;
+      try {
+        pdfBase64 = downloadAgreementPDF(
+          {
+            clientName: agreement.clientName,
+            agreementType: agreement.agreementType,
+            price: agreement.price,
+            timeline: agreement.timeline,
+            hourlyRate: agreement.hourlyRate,
+            customNotes: agreement.customNotes,
+            techStack: agreement.techStack,
+            revisions: agreement.revisions,
+            createdAt: agreement.createdAt,
+          },
+          signature,
+          signatureType,
+          signedAt,
+          code
+        );
+      } catch {
+        // PDF generation failure shouldn't block signing
+      }
+
+      // Send email notification (non-blocking)
+      sendEmail({ code, pdfBase64 }).catch(() => {});
+
       onSigned();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Submission failed. Please try again.");
@@ -257,7 +291,7 @@ export function AgreementViewer({ code, onSigned }: AgreementViewerProps) {
         </button>
 
         <p className="text-center text-gray-600 text-xs mt-4">
-          By submitting, you are legally bound by the terms of this agreement.
+          By submitting, you are legally bound by the terms of this agreement. A PDF copy will download automatically.
         </p>
       </div>
     </div>

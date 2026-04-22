@@ -37,6 +37,8 @@ const applicationTables = {
     timeline: v.string(),
     hourlyRate: v.optional(v.string()),
     customNotes: v.optional(v.string()),
+    techStack: v.optional(v.array(v.string())),
+    revisions: v.optional(v.string()),
     status: v.union(v.literal("pending"), v.literal("signed")),
     signature: v.optional(v.string()),
     signatureType: v.optional(v.union(v.literal("drawn"), v.literal("typed"))),

@@ -10,6 +10,16 @@ interface AdminPanelProps {
 
 const DEFAULT_PRICES = { standard: "$1,000", discounted: "$100" };
 
+const TECH_STACK_OPTIONS = [
+  { group: "Frontend", items: ["React", "Next.js", "Vue.js", "Angular", "Svelte", "Vanilla JS"] },
+  { group: "Backend", items: ["Node.js", "Express", "FastAPI", "Django", "Ruby on Rails"] },
+  { group: "Database", items: ["MongoDB", "PostgreSQL", "MySQL", "Firebase", "Supabase", "Convex"] },
+  { group: "Styling", items: ["Tailwind CSS", "Bootstrap", "Material UI", "Styled Components"] },
+  { group: "Other", items: ["TypeScript", "Stripe", "GraphQL", "REST API", "Vercel", "AWS", "Cloudflare"] },
+];
+
+const REVISION_OPTIONS = ["1", "2", "3", "5", "Unlimited"];
+
 export function AdminPanel({ onClose }: AdminPanelProps) {
   const [adminSecret, setAdminSecret] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -23,6 +33,8 @@ export function AdminPanel({ onClose }: AdminPanelProps) {
     timeline: "",
     hourlyRate: "",
     customNotes: "",
+    techStack: [] as string[],
+    revisions: "3",
   });
 
   const agreements = useQuery(
@@ -50,6 +62,16 @@ export function AdminPanel({ onClose }: AdminPanelProps) {
       ...f,
       agreementType: type,
       price: f.price === DEFAULT_PRICES[f.agreementType] || f.price === "" ? DEFAULT_PRICES[type] : f.price,
+      revisions: type === "standard" ? "3" : "2",
+    }));
+  };
+
+  const toggleTech = (item: string) => {
+    setForm((f) => ({
+      ...f,
+      techStack: f.techStack.includes(item)
+        ? f.techStack.filter((t) => t !== item)
+        : [...f.techStack, item],
     }));
   };
 
@@ -72,6 +94,8 @@ export function AdminPanel({ onClose }: AdminPanelProps) {
         timeline: form.timeline,
         hourlyRate: form.hourlyRate || undefined,
         customNotes: form.customNotes || undefined,
+        techStack: form.techStack.length > 0 ? form.techStack : undefined,
+        revisions: form.revisions || undefined,
       });
       toast.success(`Agreement created! Code: ${form.code}`);
       setForm({
@@ -82,6 +106,8 @@ export function AdminPanel({ onClose }: AdminPanelProps) {
         timeline: "",
         hourlyRate: "",
         customNotes: "",
+        techStack: [],
+        revisions: "3",
       });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to create agreement");
@@ -131,9 +157,7 @@ export function AdminPanel({ onClose }: AdminPanelProps) {
               ← Back to Client Portal
             </button>
           </div>
-          <p className="text-center text-gray-700 text-xs mt-4">
-            N Retrospec 
-          </p>
+          <p className="text-center text-gray-700 text-xs mt-4">N Retrospec</p>
         </div>
       </div>
     );
@@ -279,21 +303,85 @@ export function AdminPanel({ onClose }: AdminPanelProps) {
               </div>
             </div>
 
-            {form.agreementType === "standard" && (
+            <div className="grid grid-cols-2 gap-4">
+              {/* Revisions */}
               <div>
-                <label className="text-xs text-gray-400 uppercase tracking-wider mb-2 block">
-                  Hourly Rate for Extra Revisions
-                </label>
-                <input
-                  type="text"
-                  value={form.hourlyRate}
-                  onChange={(e) => setForm((f) => ({ ...f, hourlyRate: e.target.value }))}
-                  placeholder="$75"
-                  className="w-full px-3 py-2.5 rounded-lg bg-gray-800/60 border border-gray-600/50 text-white text-sm focus:outline-none focus:border-purple-500/70"
-                />
+                <label className="text-xs text-gray-400 uppercase tracking-wider mb-2 block">Revision Rounds</label>
+                <div className="flex gap-2 flex-wrap">
+                  {REVISION_OPTIONS.map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => setForm((f) => ({ ...f, revisions: opt }))}
+                      className={`px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                        form.revisions === opt
+                          ? "bg-purple-500/20 border-purple-500/40 text-purple-300"
+                          : "bg-gray-800/40 border-gray-700/40 text-gray-400 hover:text-gray-300"
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
 
+              {/* Hourly rate (standard only) */}
+              {form.agreementType === "standard" && (
+                <div>
+                  <label className="text-xs text-gray-400 uppercase tracking-wider mb-2 block">
+                    Hourly Rate (Extra Revisions)
+                  </label>
+                  <input
+                    type="text"
+                    value={form.hourlyRate}
+                    onChange={(e) => setForm((f) => ({ ...f, hourlyRate: e.target.value }))}
+                    placeholder="$75"
+                    className="w-full px-3 py-2.5 rounded-lg bg-gray-800/60 border border-gray-600/50 text-white text-sm focus:outline-none focus:border-purple-500/70"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Tech Stack */}
+            <div>
+              <label className="text-xs text-gray-400 uppercase tracking-wider mb-3 block">
+                Tech Stack{" "}
+                {form.techStack.length > 0 && (
+                  <span className="text-purple-400 normal-case ml-1">({form.techStack.length} selected)</span>
+                )}
+              </label>
+              <div className="space-y-3">
+                {TECH_STACK_OPTIONS.map((group) => (
+                  <div key={group.group}>
+                    <p className="text-gray-600 text-xs mb-1.5">{group.group}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {group.items.map((item) => (
+                        <button
+                          key={item}
+                          onClick={() => toggleTech(item)}
+                          className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-all ${
+                            form.techStack.includes(item)
+                              ? "bg-cyan-500/20 border-cyan-500/40 text-cyan-300"
+                              : "bg-gray-800/40 border-gray-700/40 text-gray-500 hover:text-gray-300 hover:border-gray-600"
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {form.techStack.length > 0 && (
+                <button
+                  onClick={() => setForm((f) => ({ ...f, techStack: [] }))}
+                  className="text-gray-600 hover:text-gray-400 text-xs mt-2 transition-colors"
+                >
+                  Clear selection
+                </button>
+              )}
+            </div>
+
+            {/* Custom notes */}
             <div>
               <label className="text-xs text-gray-400 uppercase tracking-wider mb-2 block">
                 Custom Notes <span className="text-gray-600">(optional)</span>
@@ -357,10 +445,16 @@ export function AdminPanel({ onClose }: AdminPanelProps) {
                     </div>
                     <p className="text-white text-sm font-medium truncate">{a.clientName}</p>
                     <p className="text-gray-500 text-xs mt-0.5">
-                      {a.price} · {a.timeline} · Created{" "}
-                      {new Date(a.createdAt).toLocaleDateString()}
+                      {a.price} · {a.timeline}
+                      {a.revisions && ` · ${a.revisions} revisions`}
+                      {" "}· Created {new Date(a.createdAt).toLocaleDateString()}
                       {a.signedAt && ` · Signed ${new Date(a.signedAt).toLocaleDateString()}`}
                     </p>
+                    {a.techStack && a.techStack.length > 0 && (
+                      <p className="text-gray-600 text-xs mt-0.5">
+                        Stack: {a.techStack.join(", ")}
+                      </p>
+                    )}
                     {a.status === "signed" && a.signerIp && (
                       <p className="text-gray-700 text-xs mt-0.5">IP: {a.signerIp}</p>
                     )}
